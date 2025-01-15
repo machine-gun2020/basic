@@ -13,5 +13,5 @@ public class Salidas{
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String salida() {return "Salidas, Marco";}
+    public String salida() {return "Salidas metodo get público, Marco y otros";}
 }
