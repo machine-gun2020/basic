@@ -38,7 +38,7 @@ public class SorteoController {
     @Path("/probabilidad")
     public Map<Integer, Double> getProbabilidadSorteo() {
         List<Sorteo> cuales = sorteoService.getAllSorteo();
-        log.info("Salida, cantidad de sorteos: {}", cuales.size());
+        log.info("Salida, probabilidad: {}", cuales.size());
 
         return sorteoService.calcularProbabilidad(cuales,7);
     }
