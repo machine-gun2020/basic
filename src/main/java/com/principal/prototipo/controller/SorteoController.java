@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Map;
 
 @Path("/api/sorteo")
 public class SorteoController {
@@ -29,8 +30,17 @@ public class SorteoController {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Sorteo> getSorteo() {
         List<Sorteo> cuales = sorteoService.getAllSorteo();
-        //log.info("Salida, cantidad de sorteos: {}", cuales.size());
-        return sorteoService.getAllSorteo();
+        log.info("Salida, cantidad de sorteos: {}", cuales.size());
+        return cuales;
+    }
+
+    @GET
+    @Path("/probabilidad")
+    public Map<Integer, Double> getProbabilidadSorteo() {
+        List<Sorteo> cuales = sorteoService.getAllSorteo();
+        log.info("Salida, cantidad de sorteos: {}", cuales.size());
+
+        return sorteoService.calcularProbabilidad(cuales,7);
     }
 
     @POST
