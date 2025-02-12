@@ -1,5 +1,6 @@
-package com.principal;
+package com.principal.prototipo.controller;
 
+import com.arjuna.common.logging.commonLogger;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -13,5 +14,8 @@ public class Salidas{
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String salida() {return "Salidas metodo get público, Marco y otros pso";}
+    public String salida() {
+        log.info("Salida");
+        return "Salidas metodo get público, Marco y paso";
+    }
 }
