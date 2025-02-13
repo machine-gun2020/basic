@@ -5,7 +5,6 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -23,6 +22,6 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
                 .getResultList();
     }
 
-    public void persist(Sorteo sorteo) {
+     public void persist(Sorteo sorteo) {
     }
 }
