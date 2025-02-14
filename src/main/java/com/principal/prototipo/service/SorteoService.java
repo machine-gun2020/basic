@@ -1,17 +1,15 @@
 package com.principal.prototipo.service;
 
+import com.principal.prototipo.model.Registro;
 import com.principal.prototipo.model.Sorteo;
 import com.principal.prototipo.repository.SorteoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.LinkedHashMap;
 
 @ApplicationScoped
 public class SorteoService {
@@ -60,4 +58,47 @@ public class SorteoService {
                 ));
     }
 
-}
+    public Map<Integer, List<Map<String, Object>>> getTop7NumbersByYear() {
+        List<Object[]> resultados = sorteoRepository.getTop7NumbersByYear();
+
+        return resultados.stream()
+                .map(row -> Map.of(
+                        "numero", row[0],
+                        "anio", row[1],
+                        "frecuencia", row[2]
+                ))
+                .collect(Collectors.groupingBy(row -> (Integer) row.get("anio")));
+    }
+
+    public Map<Integer, List<Registro>> obtenerChica7PorAnio() {
+        List<Object[]> resultados = sorteoRepository.getChica7NumbersByYear();
+
+        return resultados.stream()
+                .map(row -> {
+                    try {
+                        // *** CASTING CORRECTO Y MANEJO DE NULOS ***
+                        Integer numero = (Integer) row[0]; // Número como Long (o Integer si ya lo es en la BD)
+                        Integer anio = (Integer) row[1]; // Año debería ser Integer
+                        //Integer frecuencia = row[2]; // Frecuencia como Long (o Integer si ya lo es en la BD)
+                        Long frecuenciaLong = (Long) row[2]; // Primero castea a Long
+                        Integer frecuencia = frecuenciaLong.intValue(); // Luego convierte a int
+                        if (anio == null || numero == null || frecuencia == null) {
+                            System.err.println("Error: Valores nulos en la consulta a la base de datos.");
+                            return null; // O lanza una excepción
+                        }
+
+                        //int numero = numero.intValue(); // Convertir Long a int (manejar overflow si es necesario)
+                        //int frecuencia = frecuencia.intValue(); // Convertir Long a int (manejar overflow si es necesario)
+
+                        return new Registro(anio, numero, frecuencia);
+                    } catch (ClassCastException | NullPointerException e) {
+                        System.err.println("Error de casting o nulo: " + e.getMessage());
+                        return null;
+                    } catch (ArithmeticException e) {
+                        System.err.println("Error: Valor fuera del rango de int: " + e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull) // Eliminar los registros nulos (si los hay)
+                .collect(Collectors.groupingBy(Registro::getAnio));
+}}

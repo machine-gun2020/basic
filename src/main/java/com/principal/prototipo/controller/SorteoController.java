@@ -1,5 +1,6 @@
 package com.principal.prototipo.controller;
 
+import com.principal.prototipo.model.Registro;
 import com.principal.prototipo.model.Sorteo;
 import com.principal.prototipo.repository.SorteoRepository;
 import com.principal.prototipo.service.SorteoService;
@@ -10,14 +11,12 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Path("/api/sorteo")
 public class SorteoController {
@@ -47,8 +46,19 @@ public class SorteoController {
         return sorteoService.calcularProbabilidad(cuales,7);
     }
 
+    @GET
+    @Path("/top7")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Map<Integer, List<Map<String, Object>>> getTop7NumbersByYear() {
+        return sorteoService.getTop7NumbersByYear();
+    }
 
-
+    @GET
+    @Path("/chica7")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Map<Integer, List<Registro>> Chica7NumbersByYear() {
+        return sorteoService.obtenerChica7PorAnio();
+    }
 
 
     @POST
