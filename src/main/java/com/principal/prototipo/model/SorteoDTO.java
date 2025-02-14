@@ -16,6 +16,6 @@ public class SorteoDTO {
 
     @Override
     public String toString() {
-        return "SorteoDTO{numeros='" + numeros + "', fecha=" + fecha + "}";
+        return numeros+","+fecha+"\r";
     }
 }

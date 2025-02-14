@@ -42,11 +42,7 @@ public class Registro {
 
     @Override
     public String toString() {
-        return "Registro{" +
-                "anio=" + anio +
-                ", numero=" + numero +
-                ", frecuencia=" + frecuencia +
-                '}';
+        return anio + "|" + numero + "|" + frecuencia +"\r";
     }
 // ... otros métodos si los tienes
 }
