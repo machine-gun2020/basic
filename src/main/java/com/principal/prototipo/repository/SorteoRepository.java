@@ -1,6 +1,7 @@
 package com.principal.prototipo.repository;
 
 import com.principal.prototipo.model.Sorteo;
+import com.principal.prototipo.model.SorteoDTO;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -21,6 +22,15 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
         return em.createQuery("SELECT s FROM Sorteo s ORDER BY s.fecha DESC", Sorteo.class)
                 .getResultList();
     }
+
+    public List<SorteoDTO> findAllFechaDesc(){
+        List<SorteoDTO> resultList = em.createQuery("SELECT CONCAT(s.n1, '-', s.n2, '-', s.n3, '-', s.n4, '-', s.n5, '-', s.n6, '-', s.comodin), s.fecha " +
+                        "FROM Sorteo s ORDER BY s.fecha DESC",
+                SorteoDTO.class
+        ).getResultList();
+        List<SorteoDTO> resultList1 = resultList;
+        return resultList1;
+   }
     // SQL por year, y multi column
     public List<Object[]> getTop7NumbersByYear() {
         return em.createNativeQuery("""

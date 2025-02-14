@@ -2,6 +2,7 @@ package com.principal.prototipo.service;
 
 import com.principal.prototipo.model.Registro;
 import com.principal.prototipo.model.Sorteo;
+import com.principal.prototipo.model.SorteoDTO;
 import com.principal.prototipo.repository.SorteoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -21,6 +22,11 @@ public class SorteoService {
         List<Sorteo> sontodos;
         sontodos = sorteoRepository.findAllOrderedByFechaDesc();
         return sontodos;
+    }
+
+    public List<SorteoDTO> getAllFechaDesc(){
+        List<SorteoDTO> sonindex = sorteoRepository.findAllFechaDesc();
+        return sonindex;
     }
 
     public Sorteo createSorteo(Sorteo sorteo) {

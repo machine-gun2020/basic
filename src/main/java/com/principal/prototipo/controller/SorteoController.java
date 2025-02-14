@@ -2,6 +2,7 @@ package com.principal.prototipo.controller;
 
 import com.principal.prototipo.model.Registro;
 import com.principal.prototipo.model.Sorteo;
+import com.principal.prototipo.model.SorteoDTO;
 import com.principal.prototipo.repository.SorteoRepository;
 import com.principal.prototipo.service.SorteoService;
 import jakarta.ws.rs.Consumes;
@@ -35,6 +36,14 @@ public class SorteoController {
         List<Sorteo> cuales = sorteoService.getAllSorteo();
         log.info("Salida, cantidad de sorteos: {}", cuales.size());
         return cuales;
+    }
+
+    @GET
+    @Path("/index")
+    public List<SorteoDTO> getAllFechaDesc() {
+        List<SorteoDTO> indexados = sorteoService.getAllFechaDesc();
+        log.info("Salida, cantidad de sorteos indexados: {}", indexados.size());
+        return indexados;
     }
 
     @GET
