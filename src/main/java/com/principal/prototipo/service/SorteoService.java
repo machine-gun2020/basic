@@ -79,8 +79,7 @@ public class SorteoService {
     public Map<Integer, List<Registro>> obtenerChica7PorAnio() {
         List<Object[]> resultados = sorteoRepository.getChica7NumbersByYear();
 
-        return resultados.stream()
-                .map(row -> {
+        return resultados.stream().map(row -> {
                     try {
                         // *** CASTING CORRECTO Y MANEJO DE NULOS ***
                         Integer numero = (Integer) row[0]; // Número como Long (o Integer si ya lo es en la BD)
@@ -92,10 +91,6 @@ public class SorteoService {
                             System.err.println("Error: Valores nulos en la consulta a la base de datos.");
                             return null; // O lanza una excepción
                         }
-
-                        //int numero = numero.intValue(); // Convertir Long a int (manejar overflow si es necesario)
-                        //int frecuencia = frecuencia.intValue(); // Convertir Long a int (manejar overflow si es necesario)
-
                         return new Registro(anio, numero, frecuencia);
                     } catch (ClassCastException | NullPointerException e) {
                         System.err.println("Error de casting o nulo: " + e.getMessage());
@@ -104,7 +99,9 @@ public class SorteoService {
                         System.err.println("Error: Valor fuera del rango de int: " + e.getMessage());
                         return null;
                     }
-                })
+        }
+        )
                 .filter(Objects::nonNull) // Eliminar los registros nulos (si los hay)
                 .collect(Collectors.groupingBy(Registro::getAnio));
-}}
+    }
+}

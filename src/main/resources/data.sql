@@ -1,3 +1,13 @@
+insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4019,37,40,45,49,51,55,18,'2025-02-16',40000000);
+insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4018,5,11,14,29,44,45,10,'2025-02-14',37300000);
+insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4017,3,10,25,35,47,52,49,'2025-02-12',33700000);
+insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4016,2,10,14,15,21,26,45,'2025-02-09',30900000);
+insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4015,3,9,28,41,48,52,35,'2025-02-07',30700000);
+insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4014,9,14,27,28,30,45,17,'2025-02-05',30600000);
+insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4013,9,24,26,35,43,45,46,'2025-02-02',30500000);
+insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4012,5,9,12,24,50,55,31,'2025-01-31',30400000);
+
+
 insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4011,   9,17,18,21,44,47,11,'2025-01-29', 48900000);
 insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4010,   3,4,13,28,40,45,49,'2025-01-26', 48900000);
 insert into sorteo (id, n1,n2, n3,n4,n5,n6,comodin, fecha, monto) values (4009,   1,5,9,15,17,39,24,'2025-01-24', 48900000);

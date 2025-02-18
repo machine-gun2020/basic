@@ -20,19 +20,28 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
     }
     public List<Sorteo> findAllOrderedByFechaDesc() {
         return em.createQuery("SELECT s FROM Sorteo s ORDER BY s.fecha DESC", Sorteo.class)
+                .setHint("org.hibernate.readOnly", true)      // No modifica datos
+                .setHint("org.hibernate.fetchSize", 50)       // Recupera en lotes de 50
+                .setHint("org.hibernate.cacheable", true)     // Usa caché de segundo nivel
+                .setHint("jakarta.persistence.query.retrieveMode", "USE")
+                .setHint("jakarta.persistence.query.storeMode", "USE")
                 .getResultList();
     }
 
     public List<SorteoDTO> findAllFechaDesc(){
-        List<SorteoDTO> resultList = em.createQuery("SELECT CONCAT(s.n1, '-', s.n2, '-', s.n3, '-', s.n4, '-', s.n5, '-', s.n6, '-', s.comodin), s.fecha " +
+        List<SorteoDTO> resultList1 = em.createQuery("SELECT CONCAT(s.n1, '-', s.n2, '-', s.n3, '-', s.n4, '-', s.n5, '-', s.n6, '-', s.comodin), s.fecha " +
                         "FROM Sorteo s ORDER BY s.fecha DESC",
                 SorteoDTO.class
-        ).getResultList();
-        List<SorteoDTO> resultList1 = resultList;
+        )       .setHint("org.hibernate.readOnly", true)
+                .setHint("org.hibernate.fetchSize", 50)
+                .setHint("org.hibernate.cacheable", true)
+                .setHint("jakarta.persistence.query.retrieveMode", "USE")
+                .setHint("jakarta.persistence.query.storeMode", "USE")
+                .getResultList();
         return resultList1;
    }
     // SQL por year, y multi column
-    public List<Object[]> getTop7NumbersByYear() {
+    public List getTop7NumbersByYear() {
         return em.createNativeQuery("""
             WITH Numeros AS (
                 SELECT s.n1 AS num, EXTRACT(YEAR FROM s.fecha) AS anio FROM Sorteo s
@@ -63,10 +72,15 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
             FROM Conteo
             WHERE rn <= 7
             ORDER BY anio DESC, frecuencia DESC
-        """).getResultList();
+        """).setHint("org.hibernate.readOnly", true)
+            .setHint("org.hibernate.fetchSize", 50)
+            .setHint("org.hibernate.cacheable", true)
+            .setHint("jakarta.persistence.query.retrieveMode", "USE")
+            .setHint("jakarta.persistence.query.storeMode", "USE")
+            .getResultList();
     }
 
-    public List<Object[]> getChica7NumbersByYear() {
+    public List getChica7NumbersByYear() {
         return em.createNativeQuery(
                 """
                 WITH Numeros AS (
@@ -98,7 +112,13 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
                 FROM Conteo
                 WHERE rn <= 7
                 ORDER BY anio DESC, frecuencia ASC;
-                """).getResultList();
+                """)
+                .setHint("org.hibernate.readOnly", true)
+                .setHint("org.hibernate.fetchSize", 50)
+                .setHint("org.hibernate.cacheable", true)
+                .setHint("jakarta.persistence.query.retrieveMode", "USE")
+                .setHint("jakarta.persistence.query.storeMode", "USE")
+                .getResultList();
     }
 
 
