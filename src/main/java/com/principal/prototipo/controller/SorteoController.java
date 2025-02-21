@@ -5,13 +5,10 @@ import com.principal.prototipo.model.Sorteo;
 import com.principal.prototipo.model.SorteoDTO;
 import com.principal.prototipo.repository.SorteoRepository;
 import com.principal.prototipo.service.SorteoService;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,8 +55,20 @@ public class SorteoController {
     @GET
     @Path("/top7")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<Integer, List<Map<String, Object>>> getTop7NumbersByYear() {
-        return sorteoService.getTop7NumbersByYear();
+    public Response getTop7NumbersByYear(
+            @QueryParam("anioInicio") Integer anioInicio,
+            @QueryParam("anioTermino") Integer anioTermino) {
+
+        Map<Integer, List<Map<String, Object>>> result;
+
+        // Si no se envían los parámetros, usa el método original sin filtros.
+        if (anioInicio == null && anioTermino == null) {
+            result = sorteoService.getTop7NumbersByYear();
+        } else {
+            result = sorteoService.getTop7NumbersByYear(anioInicio, anioTermino);
+        }
+
+        return Response.ok(result).build();
     }
 
     @GET

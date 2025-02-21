@@ -65,14 +65,25 @@ public class SorteoService {
     }
 
     public Map<Integer, List<Map<String, Object>>> getTop7NumbersByYear() {
-        List<Object[]> resultados = sorteoRepository.getTop7NumbersByYear();
+        return procesarResultados(sorteoRepository.getTop7NumbersByYear(), null, null);
+    }
 
+    public Map<Integer, List<Map<String, Object>>> getTop7NumbersByYear(Integer anioInicio, Integer anioTermino) {
+        return procesarResultados(sorteoRepository.getTop7NumbersByYear(), anioInicio, anioTermino);
+    }
+
+    private Map<Integer, List<Map<String, Object>>> procesarResultados(List<Object[]> resultados, Integer anioInicio, Integer anioTermino) {
         return resultados.stream()
                 .map(row -> Map.of(
                         "numero", row[0],
                         "anio", row[1],
                         "frecuencia", row[2]
                 ))
+                .filter(row -> {
+                    Integer anio = (Integer) row.get("anio");
+                    return (anioInicio == null || anio >= anioInicio) &&
+                            (anioTermino == null || anio <= anioTermino);
+                })
                 .collect(Collectors.groupingBy(row -> (Integer) row.get("anio")));
     }
 

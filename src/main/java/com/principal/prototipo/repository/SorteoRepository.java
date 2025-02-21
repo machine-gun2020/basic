@@ -29,7 +29,7 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
     }
 
     public List<SorteoDTO> findAllFechaDesc(){
-        List<SorteoDTO> resultList1 = em.createQuery("SELECT CONCAT(s.n1, '-', s.n2, '-', s.n3, '-', s.n4, '-', s.n5, '-', s.n6, '-', s.comodin), s.fecha " +
+        return em.createQuery("SELECT CONCAT(s.n1, '-', s.n2, '-', s.n3, '-', s.n4, '-', s.n5, '-', s.n6, '-', s.comodin), s.fecha " +
                         "FROM Sorteo s ORDER BY s.fecha DESC",
                 SorteoDTO.class
         )       .setHint("org.hibernate.readOnly", true)
@@ -38,11 +38,14 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
                 .setHint("jakarta.persistence.query.retrieveMode", "USE")
                 .setHint("jakarta.persistence.query.storeMode", "USE")
                 .getResultList();
-        return resultList1;
    }
     // SQL por year, y multi column
-    public List getTop7NumbersByYear() {
-        return em.createNativeQuery("""
+    public List<Object[]> getTop7NumbersByYear() {
+        return getTop7NumbersByYear(null, null);
+    }
+
+    public List<Object[]> getTop7NumbersByYear(Integer anioInicio, Integer anioTermino) {
+        String query = """
             WITH Numeros AS (
                 SELECT s.n1 AS num, EXTRACT(YEAR FROM s.fecha) AS anio FROM Sorteo s
                 UNION ALL
@@ -71,13 +74,32 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
             SELECT num, anio, frecuencia
             FROM Conteo
             WHERE rn <= 7
-            ORDER BY anio DESC, frecuencia DESC
-        """).setHint("org.hibernate.readOnly", true)
-            .setHint("org.hibernate.fetchSize", 50)
-            .setHint("org.hibernate.cacheable", true)
-            .setHint("jakarta.persistence.query.retrieveMode", "USE")
-            .setHint("jakarta.persistence.query.storeMode", "USE")
-            .getResultList();
+        """;
+
+        if (anioInicio != null) {
+            query += " AND anio >= :anioInicio";
+        }
+        if (anioTermino != null) {
+            query += " AND anio <= :anioTermino";
+        }
+
+        query += " ORDER BY anio DESC, frecuencia DESC";
+
+        var nativeQuery = em.createNativeQuery(query)
+                .setHint("org.hibernate.readOnly", true)
+                .setHint("org.hibernate.fetchSize", 50)
+                .setHint("org.hibernate.cacheable", true)
+                .setHint("jakarta.persistence.query.retrieveMode", "USE")
+                .setHint("jakarta.persistence.query.storeMode", "USE");
+
+        if (anioInicio != null) {
+            nativeQuery.setParameter("anioInicio", anioInicio);
+        }
+        if (anioTermino != null) {
+            nativeQuery.setParameter("anioTermino", anioTermino);
+        }
+
+        return nativeQuery.getResultList();
     }
 
     public List getChica7NumbersByYear() {
