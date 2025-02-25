@@ -34,8 +34,7 @@ public class SorteoController {
         log.info("Salida, cantidad de sorteos: {}", cuales.size());
         return cuales;
     }
-
-    @GET
+@GET
     @Path("/index")
     public List<SorteoDTO> getAllFechaDesc() {
         List<SorteoDTO> indexados = sorteoService.getAllFechaDesc();
@@ -76,13 +75,5 @@ public class SorteoController {
     @Produces(MediaType.APPLICATION_JSON)
     public Map<Integer, List<Registro>> Chica7NumbersByYear() {
         return sorteoService.obtenerChica7PorAnio();
-    }
-
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Sorteo createPerson(Sorteo sorteo) {
-        return sorteoService.createSorteo(sorteo);
     }
 }
