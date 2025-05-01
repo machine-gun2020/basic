@@ -4,6 +4,7 @@ import com.principal.prototipo.model.Registro;
 import com.principal.prototipo.model.Sorteo;
 import com.principal.prototipo.model.SorteoDTO;
 import com.principal.prototipo.repository.SorteoRepository;
+import com.principal.prototipo.service.AnalyticsService;
 import com.principal.prototipo.service.SorteoService;
 import jakarta.ws.rs.*;
 
@@ -26,7 +27,31 @@ public class SorteoController {
     SorteoService sorteoService;
 
     @Inject
+    AnalyticsService analyticsService;
+
+    @Inject
     SorteoRepository sorteoRepository;
+
+    @GET
+    @Path("/frecuencias")
+    public Map<Integer, Integer> getFrecuencias() {
+        return analyticsService.calculateFrequency();
+    }
+
+    // Endpoint de generación
+    @GET
+    @Path("/generar-combinacion")
+    public List<Integer> generarCombinacion() {
+        return analyticsService.generateOptimalCombo();
+    }
+
+    // Endpoint de estadísticas (ejemplo adicional)
+    @GET
+    @Path("/estadisticas")
+    public String getEstadisticas() {
+        return analyticsService.getOddEvenStats();
+    }
+
 
     @GET
     @Path("/estadisticas/paridad")

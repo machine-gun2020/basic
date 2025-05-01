@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class SorteoRepository implements PanacheRepository<Sorteo> {
@@ -173,5 +174,16 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
     // Bonus: Búsqueda por número
     public List<Sorteo> findSorteosByNumber(int number) {
         return find("?1 IN (n1, n2, n3, n4, n5, n6) ORDER BY fecha DESC", number).list();
+    }
+
+    // Método para conteo eficiente
+    public long countNumberOccurrences(int number) {
+        return find("?1 in (n1, n2, n3, n4, n5, n6)", number).count();
+    }
+
+    // Stream optimizado
+    public Stream<Integer> streamAllNumbers() {
+        return findAll().stream()
+                .flatMap(s -> Stream.of(s.n1, s.n2, s.n3, s.n4, s.n5, s.n6));
     }
 }
