@@ -6,14 +6,19 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.Predicate;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.IntPredicate;
+import java.util.stream.IntStream;
 
 @ApplicationScoped
 public class SorteoRepository implements PanacheRepository<Sorteo> {
     @PersistenceContext
-    EntityManager em;
+    EntityManager em = null;
 
     public @Nullable List<Sorteo> allSorteo() {
         return null;
@@ -145,5 +150,28 @@ public class SorteoRepository implements PanacheRepository<Sorteo> {
 
 
     public void persist(Sorteo sorteo) {
+    }
+
+    // Nuevos métodos analíticos
+    public Optional<LocalDate> findLastAppearance(int number) {
+        return find("?1 IN (n1, n2, n3, n4, n5, n6) ORDER BY fecha DESC", number)
+                .firstResultOptional()
+                .map(s -> s.fecha);
+    }
+
+    public long countAllNumbers(IntPredicate condition) {
+        return findAll().stream()
+                .flatMapToInt(s -> IntStream.of(s.n1, s.n2, s.n3, s.n4, s.n5, s.n6))
+                .filter(condition::test)
+                .count();
+    }
+
+    public long totalNumbersAnalyzed() {
+        return count() * 6L;
+    }
+
+    // Bonus: Búsqueda por número
+    public List<Sorteo> findSorteosByNumber(int number) {
+        return find("?1 IN (n1, n2, n3, n4, n5, n6) ORDER BY fecha DESC", number).list();
     }
 }

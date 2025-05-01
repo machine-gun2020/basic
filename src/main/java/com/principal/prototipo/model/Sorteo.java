@@ -10,14 +10,14 @@ public class Sorteo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer n1;
-    private Integer n2;
-    private Integer n3;
-    private Integer n4;
-    private Integer n5;
-    private Integer n6;
+    public Integer n1;
+    public Integer n2;
+    public Integer n3;
+    public Integer n4;
+    public Integer n5;
+    public Integer n6;
     private Integer comodin;
-    private LocalDate fecha;
+    public LocalDate fecha;
     private Long monto;
 
     // Getters and Setters

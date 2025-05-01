@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Path("/api/sorteo")
@@ -26,6 +27,30 @@ public class SorteoController {
 
     @Inject
     SorteoRepository sorteoRepository;
+
+    @GET
+    @Path("/estadisticas/paridad")
+    public String getOddEvenStats() {
+        // 1. Conteo usando IntPredicate (óptimo para primitivos)
+        long totalPares = sorteoRepository.countAllNumbers(n -> n % 2 == 0);
+        long totalNumeros = sorteoRepository.totalNumbersAnalyzed();
+
+        // 2. Cálculo de porcentajes con división segura
+        double porcentajePares = totalNumeros > 0 ? (totalPares * 100.0) / totalNumeros : 0.0;
+        double porcentajeImpares = 100.0 - porcentajePares;
+
+        // 3. Formateo profesional con separadores de miles
+        return String.format(Locale.US,
+                """
+                ===== ESTADÍSTICAS DE PARIDAD =====
+                • Números analizados: %,d
+                • Pares: %,d (%.2f%%)
+                • Impares: %,d (%.2f%%)""",
+                totalNumeros,
+                totalPares, porcentajePares,
+                (totalNumeros - totalPares), porcentajeImpares);
+    }
+
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
